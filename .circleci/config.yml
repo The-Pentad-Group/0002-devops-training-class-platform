@@ -1,0 +1,194 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.7.0
+  # slack: circleci/slack@4.4.4   ### Notifications will be configured in later modules
+  aws-cli: circleci/aws-cli@2.0.3
+executors:
+  docker-executor:
+    docker:
+      - image: cimg/python:3.9.6
+jobs:
+  setup-aws-cli:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: default
+      - run:
+          command: aws --version
+  plan:
+    working_directory: ~/project/terraform
+    executor: docker-executor
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: default
+      - run:
+          name: Confirm AWS CLI Version
+          command: aws --version
+      - run:
+          name: Install Terraform
+          command: |
+            sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+            curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+            sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+            sudo apt-get update && sudo apt-get install terraform
+      - run:
+          name: Terraform Init & Plan
+          command: |
+            cd terraform
+            terraform init -input=false
+            terraform plan -out tf.plan
+      - persist_to_workspace:
+          root: ~/project/terraform
+          paths:
+            - .
+  apply:
+    working_directory: ~/project/terraform
+    executor: docker-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project/terraform
+      - aws-cli/setup:
+          profile-name: default
+      - run:
+          command: aws --version
+      - run:
+          command: |
+            sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+            curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+            sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+            sudo apt-get update && sudo apt-get install terraform 
+          name: Install Terraform
+      - run:
+          name: terraform init and apply
+          command: |
+            cd terraform
+            terraform init -input=false
+            terraform apply --auto-approve tf.plan
+  destroy:
+    working_directory: ~/project/terraform
+    executor: docker-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project/terraform
+      - aws-cli/setup:
+          profile-name: default
+      - run:
+          command: aws --version
+      - run:
+          command: |
+            sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+            curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+            sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+            sudo apt-get update && sudo apt-get install terraform
+          name: Install Terraform
+      - run:
+          name: terraform destroy
+          command: |
+            cd terraform
+            terraform init -input=false
+            terraform destroy --auto-approve
+  eradicate:
+    working_directory: ~/project/terraform
+    executor: docker-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project/terraform
+      - aws-cli/setup:
+          profile-name: default
+      - run:
+          command: aws --version
+      - run:
+          command: |
+            sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+            curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+            sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+            sudo apt-get update && sudo apt-get install terraform
+          name: Install Terraform
+      - run:
+          name: terraform destroy
+          command: |
+            cd terraform
+            terraform init -input=false
+            terraform destroy --auto-approve
+workflows:
+  version: 2.1
+  Terraform Plan:
+    jobs:
+      - plan:
+          context:
+            - AWS_CREDENTIALS
+  Terraform Apply:
+    jobs:
+      - plan:
+          context:
+            - AWS_CREDENTIALS
+      - apply approval:
+          type: approval
+          requires:
+            - plan
+      - apply:
+          requires:
+            - apply approval
+          context:
+            - AWS_CREDENTIALS
+          filters:
+            branches:
+              only: main
+      - destroy approval:
+          type: approval
+      - destroy:
+          requires:
+            - destroy approval
+          context:
+            - AWS_CREDENTIALS
+  Build:
+    jobs:
+      - plan:
+          context:
+            - AWS_CREDENTIALS
+      - apply approval:
+          type: approval
+          requires:
+            - plan
+          filters:
+            branches:
+              only: main
+      - apply:
+          requires:
+            - apply approval
+          context:
+            - AWS_CREDENTIALS
+          filters:
+            branches:
+              only: main
+      - destroy approval:
+          type: approval
+          filters:
+            branches:
+              only: main
+      - destroy:
+          requires:
+            - destroy approval
+          context:
+            - AWS_CREDENTIALS
+          filters:
+            branches:
+              only: main
+  Eradicate:
+    triggers:
+      - schedule:
+          cron: "0 */8 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - eradicate:
+          context:
+            - AWS_CREDENTIALS
+          
