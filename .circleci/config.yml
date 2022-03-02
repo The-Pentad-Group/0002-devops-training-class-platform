@@ -117,35 +117,6 @@ jobs:
             terraform destroy --auto-approve
 workflows:
   version: 2.1
-  Terraform Plan:
-    jobs:
-      - plan:
-          context:
-            - AWS_CREDENTIALS
-  Terraform Apply:
-    jobs:
-      - plan:
-          context:
-            - AWS_CREDENTIALS
-      - apply approval:
-          type: approval
-          requires:
-            - plan
-      - apply:
-          requires:
-            - apply approval
-          context:
-            - AWS_CREDENTIALS
-          filters:
-            branches:
-              only: main
-      - destroy approval:
-          type: approval
-      - destroy:
-          requires:
-            - destroy approval
-          context:
-            - AWS_CREDENTIALS
   Build:
     jobs:
       - plan:
