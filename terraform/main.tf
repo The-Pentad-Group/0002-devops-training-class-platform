@@ -10,8 +10,8 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "your-bucket-name"
-    key    = "your-tf-state-name.tfstate"
-    region = "your-region-name-1"
+    bucket = "tpg-training-remotestate"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
   }
 }
