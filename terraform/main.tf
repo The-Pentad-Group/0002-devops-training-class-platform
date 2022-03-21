@@ -25,13 +25,13 @@ locals {
 data "aws_availability_zones" "available" {
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
+# data "aws_eks_cluster" "cluster" {
+#  name = module.eks.cluster_id
+#}
 
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-}
+#data "aws_eks_cluster_auth" "cluster" {
+#  name = module.eks.cluster_id
+#}
 
 
 module "vpc" {
@@ -58,26 +58,13 @@ module "vpc" {
   }
 }
 
-module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "18.11.0"
+# module "eks" {
+#   source  = "terraform-aws-modules/eks/aws"
+#   version = "18.11.0"
 
-  cluster_name    = "${local.cluster_name}"
-  cluster_version = "1.17"
- # subnets         = module.vpc.private_subnets
+#   cluster_name    = "${local.cluster_name}"
+#   cluster_version = "1.17"
+#   subnet_ids         = [module.vpc.private_subnets]
 
-  vpc_id = module.vpc.vpc_id
-
-  # node_groups = {
-  #   first = {
-  #     desired_capacity = 1
-  #     max_capacity     = 10
-  #     min_capacity     = 1
-
-  #     instance_type = "m5.large"
-  #   }
-  # }
-
- # write_kubeconfig   = true
- # config_output_path = "./"
-}
+#   vpc_id = module.vpc.vpc_id
+# }
