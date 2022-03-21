@@ -64,20 +64,20 @@ module "eks" {
 
   cluster_name    = "${local.cluster_name}"
   cluster_version = "1.17"
-  subnets         = module.vpc.private_subnets
+ # subnets         = module.vpc.private_subnets
 
   vpc_id = module.vpc.vpc_id
 
-  node_groups = {
-    first = {
-      desired_capacity = 1
-      max_capacity     = 10
-      min_capacity     = 1
+  # node_groups = {
+  #   first = {
+  #     desired_capacity = 1
+  #     max_capacity     = 10
+  #     min_capacity     = 1
 
-      instance_type = "m5.large"
-    }
-  }
+  #     instance_type = "m5.large"
+  #   }
+  # }
 
-  write_kubeconfig   = true
-  config_output_path = "./"
+ # write_kubeconfig   = true
+ # config_output_path = "./"
 }
