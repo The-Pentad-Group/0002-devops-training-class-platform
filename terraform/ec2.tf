@@ -4,7 +4,7 @@ resource "aws_instance" "ec2" {
     key => value
   }
   instance_type = each.value.instance_type
-  ami           = data.aws_ami_windows_image.id
+  ami           = data.aws_ami.windows_image.id
 }
 
 data "aws_ami" "windows_image" {
