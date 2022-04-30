@@ -6,3 +6,8 @@ ec2_config = {
     instance_type = "t2.medium"
   }
 }
+
+workspace_config = {
+
+  
+}
