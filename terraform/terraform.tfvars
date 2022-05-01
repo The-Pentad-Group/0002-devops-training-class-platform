@@ -7,7 +7,6 @@ ec2_config = {
   }
 }
 workspace_user_names = {
+  directory_id = "d-9067783251"
   user_name = "Josh"
-  user_name = "Jarred"
-  user_name = "Akil"
 }
