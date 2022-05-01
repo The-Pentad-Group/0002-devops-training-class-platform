@@ -4,13 +4,11 @@ data "aws_workspaces_bundle" "value_windows_10" {
 }
 
 resource "aws_workspaces_workspace" "example" {
-     for_each = {
-    for key, value in var.workspace_config :
-    key => value
-  }
- directory_id = aws_workspaces_directory.example.id
+ 
+  directory_id = aws_workspaces_directory.example.id
   bundle_id    = data.aws_workspaces_bundle.value_windows_10.id
-  user_name    = each.value.user_name
+  for_each = var.workspace_user_names
+  user_name = each.key
 
   root_volume_encryption_enabled = true
   user_volume_encryption_enabled = true

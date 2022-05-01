@@ -6,10 +6,8 @@ ec2_config = {
     instance_type = "t2.medium"
   }
 }
-
-workspace_config = {
+workspace_user_names = {
   user_name = "Josh"
   user_name = "Jarred"
   user_name = "Akil"
-  
 }
