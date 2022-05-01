@@ -91,7 +91,7 @@ resource "aws_workspaces_workspace" "workspaces" {
   user_name = "Admin"
   root_volume_encryption_enabled = true
   user_volume_encryption_enabled = true
-  volume_encryption_key = aws_kms_key.workspaces-kms.arn
+  
   workspace_properties {
     compute_type_name = "VALUE"
     user_volume_size_gib = 50
