@@ -9,8 +9,8 @@ resource "aws_workspaces_workspace" "example" {
   #   key => value
   # }
   bundle_id    = data.aws_workspaces_bundle.value_windows_10.id
-  directory_id = data.aws_workspaces_directory.value.directory_id
-  user_name = data.aws_workspaces_directory.value.user_name
+  directory_id = data.aws_workspaces_directory.directory_id
+  user_name = data.aws_workspaces_directory.user_name
 
 
   root_volume_encryption_enabled = true
@@ -31,7 +31,7 @@ resource "aws_workspaces_workspace" "example" {
 
 data "aws_workspaces_directory" "example" {
   directory_id = "d-9067783251"
-  user_name = "Josh"
+  customer_user_name = "Josh"
 }
 
   
