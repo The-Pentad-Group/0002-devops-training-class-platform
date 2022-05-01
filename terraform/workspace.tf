@@ -2,7 +2,9 @@
 data "aws_workspaces_bundle" "value_windows_10" {
   bundle_id = "wsb-bh8rsxt14" # Value with Windows 10 (English)
 }
-
+data "aws_workspaces_directory" "example" {
+  directory_id = "d-9067783251"
+}
 resource "aws_workspaces_workspace" "example" {
   #  for_each = {
   #   for key, value in var.workspace_user_names :
@@ -10,7 +12,7 @@ resource "aws_workspaces_workspace" "example" {
   # }
   bundle_id    = data.aws_workspaces_bundle.value_windows_10.id
   directory_id = data.aws_workspaces_directory.example.directory_id
-  # user_name = data.aws_workspaces_directory.user_name
+  user_name = "test"
 
 
   root_volume_encryption_enabled = true
@@ -29,8 +31,6 @@ resource "aws_workspaces_workspace" "example" {
   }
 }
 
-data "aws_workspaces_directory" "example" {
-  directory_id = "d-9067783251"
-}
+
 
   
