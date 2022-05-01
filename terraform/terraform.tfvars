@@ -6,7 +6,7 @@ ec2_config = {
     instance_type = "t2.medium"
   }
 }
-workspace_user_names = {
-  directory_id = "d-9067783251"
-  user_name = "Josh"
-}
+# workspace_user_names = {
+#   directory_id = "d-9067783251"
+#   user_name = "Josh"
+# }

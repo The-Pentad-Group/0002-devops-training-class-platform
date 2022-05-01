@@ -4,13 +4,13 @@ data "aws_workspaces_bundle" "value_windows_10" {
 }
 
 resource "aws_workspaces_workspace" "example" {
-   for_each = {
-    for key, value in var.workspace_user_names :
-    key => value
-  }
+  #  for_each = {
+  #   for key, value in var.workspace_user_names :
+  #   key => value
+  # }
   bundle_id    = data.aws_workspaces_bundle.value_windows_10.id
-  directory_id = each.value.directory_id
-  user_name = each.value.user_name
+  directory_id = data.aws_workspaces_directory.value.directory_id
+  user_name = data.aws_workspaces_directory.value.user_name
 
 
   root_volume_encryption_enabled = true
@@ -28,3 +28,10 @@ resource "aws_workspaces_workspace" "example" {
     Department = "DepartmentofJosh"
   }
 }
+
+data "aws_workspaces_directory" "example" {
+  directory_id = "d-9067783251"
+  user_name = "Josh"
+}
+
+  
