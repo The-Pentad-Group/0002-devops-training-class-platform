@@ -6,7 +6,10 @@ ec2_config = {
     instance_type = "t2.medium"
   }
 }
-# workspace_user_names = {
-#   directory_id = "d-9067783251"
-#   user_name = "Josh"
-# }
+lightsnail_config = {
+  JOSH_SNAIL = {
+  availability_zone = "us-east-1b"
+  blueprint_id      = "windows_server_2019"
+  bundle_id         = "micro_2_0"
+  }
+}
