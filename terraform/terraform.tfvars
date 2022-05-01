@@ -14,3 +14,9 @@ lightsnail_config = {
   bundle_id         = "micro_2_0"
   }
 }
+
+alb_resource_tags = {
+  Project = "axk-alb",
+  Environment = "axk-new-test",
+  Owner = "axk@blahblah.com"
+}
