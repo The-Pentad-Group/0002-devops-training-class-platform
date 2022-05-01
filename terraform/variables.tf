@@ -3,5 +3,5 @@ variable "ec2_config" {
 }
 
 variable "workspace_config" {
-  type = string
+  type = map(any)
 }

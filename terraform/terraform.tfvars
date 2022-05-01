@@ -8,6 +8,8 @@ ec2_config = {
 }
 
 workspace_config = {
-
+  user_name = "Josh"
+  user_name = "Jarred"
+  user_name = "Akil"
   
 }
