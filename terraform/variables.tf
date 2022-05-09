@@ -7,19 +7,19 @@ variable "lightsnail_config" {
 }
 
 variable "load_balancer_type" {
-    description = "The type on load balancer."
-    type = string
-    default = "application"
-  
+  description = "The type on load balancer."
+  type        = string
+  default     = "application"
+
 }
 
 variable "alb_resource_tags" {
-    description = "Tags to be set for the load balancer."
-    type = map(string)
-    default = {
-      Environment = "axk-old-test"
-      Project = "axk-lb"
+  description = "Tags to be set for the load balancer."
+  type        = map(string)
+  default = {
+    Environment = "axk-old-test"
+    Project     = "axk-lb"
 
-    }
-  
+  }
+
 }
